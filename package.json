@@ -40,6 +40,7 @@
     "react-addons-css-transition-group": "^15.0.0",
     "react-catalyst": "0.3.0",
     "react-dom": "^15.0.0",
+    "react-fetch": "0.0.9",
     "react-mixin": "3.0.0",
     "react-router": "^2.4.0",
     "vinyl-buffer": "1.0.0",
