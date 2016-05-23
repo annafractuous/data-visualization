@@ -49,6 +49,7 @@
     "webpack": "^1.13.0"
   },
   "dependencies": {
+    "jsonfile": "^2.3.0",
     "react-bootstrap": "^0.29.3"
   }
 }

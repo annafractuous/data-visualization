@@ -44,14 +44,22 @@ gulp.task('styles',function() {
 gulp.task('images',function(){
   gulp.src('images/**')
     .pipe(cache(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('./build/images'))
+    .pipe(gulp.dest('./build/images/'))
+});
+
+/*
+  Resources
+*/
+gulp.task('resources',function(){
+  gulp.src('resources/**')
+    .pipe(gulp.dest('./build/resources/'))
 });
 
 /*
   Clean Build
 */
 gulp.task('clean', function() {
-    return del(['build/*.js', 'build/css', 'build/images']);
+    return del(['build/*.js', 'build/css/*.css', 'build/images/**.*']);
 });
 
 /*
@@ -111,7 +119,7 @@ gulp.task('scripts', function() {
 });
 
 // run 'scripts' task first, then watch for future changes
-gulp.task('default', ['images','styles','scripts','clean','browser-sync'], function() {
+gulp.task('default', ['images','styles','scripts','resources','clean','browser-sync'], function() {
   gulp.watch('css/**/*', ['styles']); // gulp watch for stylus changes
   return buildScript('main.js', true); // browserify watch for JS changes
 });
