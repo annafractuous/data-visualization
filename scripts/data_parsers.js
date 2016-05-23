@@ -3,7 +3,7 @@
 export function parseHsDemographicsData(dataHash) {
   var highSchoolDemographics = {};
   dataHash.forEach(function(school){
-    if (school["Year"] === "2015-16" && school["Grade 12"] > 0) {
+    if (school["Year"] === "2015-16" && school["Grade 10"] > 0) {
       var name = school["School Name"].replace(/\.|\/|#/g, "");
       highSchoolDemographics[name] = {
         year: school["Year"],
@@ -78,4 +78,45 @@ export function parseDistrictDemographicsData(dataHash) {
     }
   })
   return schoolDistrictDemographics;
+}
+
+/* Merging Poverty Percentage Into Offerings Data */
+
+function mergeWithPovertyStat() {
+  var refDemographics = new Firebase('https://data-viz.firebaseio.com/hsDemographics201516');
+  var refOfferings = new Firebase('https://data-viz.firebaseio.com/hsOfferings');
+
+  // getch demographics data from Firebase
+  refDemographics.on("value", function(snapshot) {
+    var demoData = snapshot.val();
+    var demoSchools = Object.keys(demoData);
+
+    // once demographics data is loaded, fetch HS offerings data
+    refOfferings.on("value", function(snapshot) {
+      var offeringsData = snapshot.val();
+
+      for (var school in offeringsData) {
+        // account for differences in capitalization or school names that are cut off in demog. dataset
+        var key = demoSchools.find(function(schoolName) {
+          return school.toLowerCase() === schoolName.toLowerCase() || school.slice(0,40) === schoolName.slice(0,40);
+        });
+
+        if (demoData[key]) {
+          var demographics = demoData[key];
+          offeringsData[school]["poverty"] = demographics.poverty;
+        }
+        else {
+          offeringsData[school]["poverty"] = "Data Not Found";
+        }
+      };
+
+      saveToFirebase('hsOfferings', offeringsData);
+
+    // failure callbacks
+    }, function (errorObject) {
+      console.log("The read failed: " + errorObject.code);
+    });
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+  });  
 }
