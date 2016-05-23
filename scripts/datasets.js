@@ -1,3 +1,6 @@
+// Parsing Functions
+import { parseHsDemographicsData, parseHsOfferingsData, parseDistrictDemographicsData } from './data_parsers';
+
 export const datasets = {
   nycHighSchoolDemographics: {
     data: require('../resources/all_school_demographics_2011_15.json'),

@@ -14,9 +14,8 @@ import autobind from 'autobind-decorator';
 // Components
 import App from './components/App';
 
-// Parsing Data
+// Data
 import { datasets } from './datasets';
-import { parseHsDemographicsData, parseHsOfferingsData, parseDistrictDemographicsData } from './data_parsers';
 
 /*
   Save Data to Firebase
