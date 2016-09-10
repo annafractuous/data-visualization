@@ -32,12 +32,16 @@ class App extends React.Component {
 
     var dataset = this.state.hsOfferings;
 
+    var getNumApClasses = function(apClasses) {
+        return (typeof apClasses === "object" ? apClasses.length : 0);
+    }
+
     var colors = d3.scaleLinear()
-      .domain([0, d3.max(dataset.map(function(school){ return school.poverty }))])
-      .range(['green', 'red']);
+      .domain([0, 50, 100])
+      .range(['green', 'yellow', 'red']);
 
     var yScale = d3.scaleLinear()
-      .domain([0, d3.max(dataset.map(function(school){ return school.apClasses.length }))])
+      .domain([0, d3.max(dataset.map(function(school){ return getNumApClasses(school.apClasses) }))])
       .range([0, height - 20]);
 
     var xScale = d3.scaleBand()
@@ -64,10 +68,10 @@ class App extends React.Component {
               return xScale(i);
           })
           .attr('height', function(d) {
-              return yScale(d.apClasses.length);
+              return yScale(getNumApClasses(d.apClasses));
           })
           .attr('y', function(d) {
-              return height - yScale(d.apClasses.length);
+              return height - yScale(getNumApClasses(d.apClasses));
           })
 
     graph.on('mouseover', function(d) {
